@@ -1,5 +1,0 @@
-package lectures
-
-class Test {
-
-}
