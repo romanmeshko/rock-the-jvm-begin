@@ -1,5 +1,5 @@
 package lectures
 
-class Tesr {
+class Test {
 
 }
