@@ -1,4 +1,4 @@
-package exercises
+package exercises.part1basics
 
 object Functions extends App {
   def greeting(name: String, age: Int): String =

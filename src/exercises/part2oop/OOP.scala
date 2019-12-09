@@ -1,8 +1,8 @@
-package exercises
+package exercises.part2oop
 
 object OOP extends App {
   val writer = new Writer("John", "Sedgewick", 55)
-  writer.fullname()
+  writer.fullname
 }
 
 class Writer(val firstName: String, val surname: String, val year: Int) {
