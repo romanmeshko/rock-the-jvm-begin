@@ -7,9 +7,9 @@ abstract class GList[+A] {
   def add[B >: A](element: B): GList[B]
   override def toString: String = s"[ $printElements ]"
   def printElements: String
-  def map[B](transformer: MyTransformer[A, B]): GList[B]
-  def filter(predicate: MyPredicate[A]): GList[A]
-  def flatMap[B](transformer: MyTransformer[A, GList[B]]): GList[B]
+  def map[B](transformer: A => B): GList[B]
+  def filter(predicate: A => Boolean): GList[A]
+  def flatMap[B](transformer: A => GList[B]): GList[B]
   def ++[B >: A](list: GList[B]): GList[B]
 }
 
@@ -19,9 +19,9 @@ object EmptyList extends GList[Nothing] {
   override def isEmpty: Boolean = true
   override def add[B >: Nothing](element: B): GList[B] = new Cons(element, this)
   override def printElements: String = ""
-  override def map[B](transformer: MyTransformer[Nothing, B]): GList[B] = this
-  override def filter(predicate: MyPredicate[Nothing]): GList[Nothing] = this
-  override def flatMap[B](transformer: MyTransformer[Nothing, GList[B]]): GList[B] = this
+  override def map[B](transformer: Nothing => B): GList[B] = this
+  override def filter(predicate: Nothing => Boolean): GList[Nothing] = this
+  override def flatMap[B](transformer: Nothing => GList[B]): GList[B] = this
   override def ++[B >: Nothing](list: GList[B]): GList[B] = list
 }
 
@@ -33,14 +33,14 @@ class Cons[+A](element: A, t: GList[A]) extends GList[A] {
   override def printElements: String =
     if (t.isEmpty) s"$element"
     else s"$element ${t.printElements}"
-  override def map[B](transformer: MyTransformer[A, B]): GList[B] =
-    new Cons(transformer.transform(element), t.map(transformer))
-  override def filter(predicate: MyPredicate[A]): GList[A] =
-    if (predicate.test(element)) new Cons(element, t.filter(predicate))
+  override def map[B](transformer: A => B): GList[B] =
+    new Cons(transformer.apply(element), t.map(transformer))
+  override def filter(predicate: A => Boolean): GList[A] =
+    if (predicate.apply(element)) new Cons(element, t.filter(predicate))
     else t.filter(predicate)
   override def ++[B >: A](list: GList[B]): GList[B] = new Cons[B](element, t ++ list)
-  override def flatMap[B](transformer: MyTransformer[A, GList[B]]): GList[B] =
-    transformer.transform(element) ++ t.flatMap(transformer)
+  override def flatMap[B](transformer: A => GList[B]): GList[B] =
+    transformer.apply(element) ++ t.flatMap(transformer)
 }
 
 trait MyPredicate[-T] {
