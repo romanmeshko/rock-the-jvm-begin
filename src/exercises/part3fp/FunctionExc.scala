@@ -11,5 +11,5 @@ object FunctionExc {
     }
   }
 
-  val funcFunc: Int => Int => Int = x => y => 6
+  val funcFunc: Int => Int => Int = x => y => x + y
 }
