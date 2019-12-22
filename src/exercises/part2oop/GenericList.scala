@@ -9,7 +9,7 @@ abstract class GList[+A] {
 
   def add[B >: A](element: B): GList[B]
 
-  override def toString: String = s"[ $printElements ]"
+  override def toString: String = s"[$printElements]"
 
   def printElements: String
 
